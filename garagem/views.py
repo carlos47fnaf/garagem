@@ -1,7 +1,8 @@
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
-from garagem.models import Marca, Cor, Acessorio, Veiculo
-from garagem.serializers import MarcaSerializer, CorSerializer, AcessorioSerializer, VeiculoSerializer
+from garagem.models import Marca, Cor, Acessorio, Veiculo, Categoria
+from garagem.serializers import MarcaSerializer, CorSerializer, AcessorioSerializer, VeiculoSerializer, CategoriaSerializer, VeiculoListSerializer, VeiculoDetailSerializer
 
 class  MarcaViewSet(ModelViewSet):
     queryset = Marca.objects.all()
@@ -18,3 +19,14 @@ class AcessorioViewSet(ModelViewSet):
 class VeiculoViewSet(ModelViewSet):
     queryset = Veiculo.objects.all()
     serializer_class = VeiculoSerializer
+    def get_serializer_class(self):
+        if self.action == "list":
+            return VeiculoListSerializer
+        elif self.action == "retrieve":
+            return VeiculoDetailSerializer
+        return VeiculoSerializer
+
+class CategoriaViewSet(ModelViewSet):
+    queryset = Categoria.objects.all()
+    serializer_class = CategoriaSerializer
+    permission_classes = [IsAuthenticated]
